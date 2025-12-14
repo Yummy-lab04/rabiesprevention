@@ -9,7 +9,8 @@
   },
   "scripts": {
     "serve": "npx http-server -p 3000",
-    "dev": "npx http-server -p 3000 -c-1"
+    "dev": "npx http-server -p 3000 -c-1",
+    "build": "echo 'Static site - no build needed'"
   },
   "keywords": [
     "rabies",

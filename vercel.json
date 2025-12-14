@@ -1,5 +1,22 @@
 {
   "buildCommand": "",
-  "outputDirectory": ".",
-  "cleanUrls": true
+  "installCommand": "",
+  "outputDirectory": "./",
+  "public": true,
+  "routes": [
+    {
+      "src": "/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "trailingSlash": false
 }
