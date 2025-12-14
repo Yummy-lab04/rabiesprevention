@@ -1,0 +1,26 @@
+{
+  "name": "rabies-awareness",
+  "version": "1.0.0",
+  "description": "Educational website about rabies prevention and awareness - 100% Fatal, 100% Preventable",
+  "main": "rabiesprevention.html",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yummy-lab04/rabiesprevention.git"
+  },
+  "scripts": {
+    "serve": "npx http-server -p 3000",
+    "dev": "npx http-server -p 3000 -c-1"
+  },
+  "keywords": [
+    "rabies",
+    "awareness",
+    "prevention",
+    "public-health",
+    "education"
+  ],
+  "author": "Yummy-lab04",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

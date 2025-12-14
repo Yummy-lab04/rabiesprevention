@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rabies Awareness | 100% Preventable</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom styles to supplement Tailwind */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #e5e7eb;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+        .tab-active {
+            border-bottom: 3px solid #dc2626; /* Red-600 */
+            color: #1c1917; /* Stone-900 */
+            font-weight: 700;
+        }
+        .tab-inactive {
+            color: #78716c; /* Stone-500 */
+            border-bottom: 3px solid transparent;
+        }
+        .tab-inactive:hover {
+            color: #dc2626;
+        }
+        /* Hide scrollbar for horizontal scrolling elements */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Pulse animation for emergency button */
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+        .animate-pulse-red {
+            animation: pulse-red 2s infinite;
+        }
+    </style>
+    <!-- Chosen Palette: Stone & Red (Warm Neutral Base with High-Contrast Emergency Accents) -->
+    <!-- Application Structure Plan: 
+         1. Hero: Immediate "I've been bitten" action vs "Learn".
+         2. The Reality (Data): Chart visualizing the 100% fatality vs 100% survival rate to drive home the message immediately.
+         3. Education Hub: Tabbed interface for Transmission, Symptoms, and Myths to prevent information overload.
+         4. Prevention Timeline: Vertical/Horizontal step-by-step visual guide for Human PEP and Pet schedules.
+         5. Emergency Tool: Functional inputs for finding care.
+         6. Quiz: Gamified reinforcement of key concepts.
+         Rationale: This structure prioritizes the "Emergency" nature of rabies while allowing exploration of the "Education" aspects without scrolling through walls of text.
+    -->
+    <!-- Visualization & Content Choices:
+         1. Chart.js Doughnut: Visualizes "Survival Rate without PEP (0%)" vs "With PEP (100%)". Goal: Shock & Inform. Interaction: Tooltip details.
+         2. Tabbed Content: For Symptoms/Myths. Goal: Organize information density. Interaction: Click to switch views.
+         3. CSS Timeline: For Vaccination Schedule. Goal: Show linear progression of treatment. Interaction: Hover effects.
+         4. JS Quiz: Interactive testing. Goal: Active recall.
+         5. Unicode Icons: Used throughout for visual cues (NO SVG used).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-stone-800 antialiased selection:bg-red-200 selection:text-red-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">🐕</span>
+                    <span class="font-bold text-xl tracking-tight text-stone-900">Rabies<span class="text-red-600">Aware</span></span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#reality" class="text-stone-600 hover:text-red-600 font-medium transition-colors">The Facts</a>
+                    <a href="#education" class="text-stone-600 hover:text-red-600 font-medium transition-colors">Education</a>
+                    <a href="#prevention" class="text-stone-600 hover:text-red-600 font-medium transition-colors">Prevention</a>
+                    <a href="#quiz" class="text-stone-600 hover:text-red-600 font-medium transition-colors">Quiz</a>
+                </div>
+                <div class="flex items-center">
+                    <a href="#emergency" class="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 transition shadow-lg animate-pulse-red text-sm">
+                        🚑 Emergency
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-stone-900 text-white overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div class="relative max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+            <div class="inline-block bg-red-900/50 text-red-200 px-4 py-1 rounded-full text-sm font-semibold mb-6 border border-red-700">
+                ⚠️ Public Health Alert
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                100% Fatal. <br class="md:hidden" /><span class="text-red-500">100% Preventable.</span>
+            </h1>
+            <p class="max-w-2xl text-xl text-stone-300 mb-10">
+                Rabies is a deadly viral disease. If you've been bitten, time is your only cure. Know the facts, vaccinate your pets, and act immediately.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                <button onclick="document.getElementById('emergency').scrollIntoView({behavior: 'smooth'})" class="bg-red-600 text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-red-700 transition shadow-xl transform hover:-translate-y-1">
+                    I've Been Bitten (Protocol)
+                </button>
+                <button onclick="document.getElementById('education').scrollIntoView({behavior: 'smooth'})" class="bg-stone-700 text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-stone-600 transition shadow-lg border border-stone-600">
+                    Learn Prevention
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- The Reality (Data Viz) -->
+    <section id="reality" class="py-16 bg-white border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-stone-900 mb-4">The Critical Difference</h2>
+                    <p class="text-lg text-stone-600 mb-6">
+                        This chart visualizes the stark reality of Rabies. Without Post-Exposure Prophylaxis (PEP), the survival rate is effectively zero once symptoms appear. With immediate PEP, survival is nearly guaranteed.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">🦠</span>
+                            <div>
+                                <strong class="block text-stone-900">The Virus</strong>
+                                <span class="text-stone-600 text-sm">Attacks the central nervous system, causing inflammation of the brain.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">⏳</span>
+                            <div>
+                                <strong class="block text-stone-900">The Window</strong>
+                                <span class="text-stone-600 text-sm">You must get vaccinated <strong>before</strong> symptoms appear.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-stone-50 p-6 rounded-2xl shadow-inner border border-stone-200">
+                    <h3 class="text-center font-bold text-stone-700 mb-4">Survival Outcomes</h3>
+                    <!-- Chart Container -->
+                    <div class="chart-container">
+                        <canvas id="survivalChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-stone-400 mt-2">Source: WHO Data on Rabies Mortality</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Hub -->
+    <section id="education" class="py-16 bg-stone-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-900">Knowledge is Safety</h2>
+                <p class="mt-4 text-stone-600 max-w-2xl mx-auto">
+                    Understanding how rabies spreads and recognizing the signs can save lives. Explore the tabs below to learn the essentials.
+                </p>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="flex justify-center mb-8 border-b border-stone-200">
+                <button onclick="switchTab('transmission')" id="tab-transmission" class="tab-active px-6 py-3 text-lg transition-all focus:outline-none">
+                    Transmission
+                </button>
+                <button onclick="switchTab('symptoms')" id="tab-symptoms" class="tab-inactive px-6 py-3 text-lg transition-all focus:outline-none">
+                    Symptoms
+                </button>
+                <button onclick="switchTab('myths')" id="tab-myths" class="tab-inactive px-6 py-3 text-lg transition-all focus:outline-none">
+                    Myths vs Facts
+                </button>
+            </div>
+
+            <!-- Tab Content Area -->
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-stone-200 min-h-[400px]">
+                
+                <!-- Transmission Content -->
+                <div id="content-transmission" class="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in">
+                    <div class="text-center p-6 bg-stone-50 rounded-xl hover:shadow-md transition">
+                        <div class="text-6xl mb-4">🐕</div>
+                        <h3 class="text-xl font-bold mb-2">The Bite</h3>
+                        <p class="text-stone-600">The most common route. 99% of human cases are caused by dog bites. The virus lives in saliva.</p>
+                    </div>
+                    <div class="text-center p-6 bg-stone-50 rounded-xl hover:shadow-md transition">
+                        <div class="text-6xl mb-4">🐈</div>
+                        <h3 class="text-xl font-bold mb-2">Scratches</h3>
+                        <p class="text-stone-600">Deep scratches that draw blood can also transmit the virus if the animal has licked its claws.</p>
+                    </div>
+                    <div class="text-center p-6 bg-stone-50 rounded-xl hover:shadow-md transition">
+                        <div class="text-6xl mb-4">🦇</div>
+                        <h3 class="text-xl font-bold mb-2">Mucous Membranes</h3>
+                        <p class="text-stone-600">Saliva contact with eyes, nose, mouth, or open wounds poses a risk, even without a bite.</p>
+                    </div>
+                </div>
+
+                <!-- Symptoms Content -->
+                <div id="content-symptoms" class="hidden grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                        <h3 class="text-xl font-bold text-blue-900 mb-4 flex items-center"><span class="mr-2">🤒</span> Early Stage (Incubation)</h3>
+                        <p class="text-sm text-blue-800 mb-4">Often mistaken for the flu. This is the last chance for treatment.</p>
+                        <ul class="space-y-2 text-blue-900">
+                            <li>• Fever & Headache</li>
+                            <li>• General Weakness</li>
+                            <li>• Discomfort/Prickling at bite site</li>
+                        </ul>
+                    </div>
+                    <div class="bg-red-50 p-6 rounded-xl border border-red-100">
+                        <h3 class="text-xl font-bold text-red-900 mb-4 flex items-center"><span class="mr-2">🧠</span> Late Stage (Acute Neurological)</h3>
+                        <p class="text-sm text-red-800 mb-4">Once these appear, the disease is nearly always fatal.</p>
+                        <ul class="space-y-2 text-red-900">
+                            <li>• Hydrophobia (Fear of water)</li>
+                            <li>• Confusion & Agitation</li>
+                            <li>• Hypersalivation</li>
+                            <li>• Paralysis</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Myths Content -->
+                <div id="content-myths" class="hidden space-y-4">
+                    <div class="flex flex-col md:flex-row gap-4 items-start p-4 border rounded-lg bg-stone-50">
+                        <div class="bg-red-100 text-red-800 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider md:w-24 text-center mt-1">Myth</div>
+                        <div class="flex-1">
+                            <strong class="block text-lg">"Only dogs that foam at the mouth have rabies."</strong>
+                            <p class="text-stone-600 mt-1"><span class="text-green-600 font-bold">FACT:</span> Animals can have "dumb rabies," where they appear quiet, lethargic, or paralyzed. Do not approach stray animals acting strangely.</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-4 items-start p-4 border rounded-lg bg-stone-50">
+                        <div class="bg-red-100 text-red-800 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider md:w-24 text-center mt-1">Myth</div>
+                        <div class="flex-1">
+                            <strong class="block text-lg">"I can treat the bite with garlic or vinegar."</strong>
+                            <p class="text-stone-600 mt-1"><span class="text-green-600 font-bold">FACT:</span> Folk remedies do NOT kill the virus. Only proper medical Post-Exposure Prophylaxis (PEP) works.</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-4 items-start p-4 border rounded-lg bg-stone-50">
+                        <div class="bg-red-100 text-red-800 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider md:w-24 text-center mt-1">Myth</div>
+                        <div class="flex-1">
+                            <strong class="block text-lg">"Puppies don't need vaccination."</strong>
+                            <p class="text-stone-600 mt-1"><span class="text-green-600 font-bold">FACT:</span> Puppies can be infected and transmit the virus. They need their first shot as early as 3 months.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Prevention Schedule -->
+    <section id="prevention" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-stone-900 mb-12 text-center">Protocol & Schedules</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Human PEP Timeline -->
+                <div>
+                    <h3 class="text-2xl font-bold text-stone-800 mb-6 flex items-center">
+                        <span class="bg-red-100 text-red-600 p-2 rounded-lg mr-3 text-xl">💉</span> 
+                        Human Post-Exposure
+                    </h3>
+                    <p class="text-sm text-stone-500 mb-6">If bitten, you must follow this schedule strictly. Do not miss a dose.</p>
+                    
+                    <div class="relative pl-8 border-l-4 border-red-200 space-y-8">
+                        <div class="relative">
+                            <div class="absolute -left-[38px] top-0 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">0</div>
+                            <h4 class="text-lg font-bold text-stone-900">Day 0 (Immediately)</h4>
+                            <p class="text-stone-600">First dose of Rabies Vaccine + Rabies Immunoglobulin (RIG) if wound is severe.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[38px] top-0 bg-red-400 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">3</div>
+                            <h4 class="text-lg font-bold text-stone-900">Day 3</h4>
+                            <p class="text-stone-600">Second dose of Rabies Vaccine.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[38px] top-0 bg-red-400 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">7</div>
+                            <h4 class="text-lg font-bold text-stone-900">Day 7</h4>
+                            <p class="text-stone-600">Third dose of Rabies Vaccine.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[38px] top-0 bg-red-400 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">14</div>
+                            <h4 class="text-lg font-bold text-stone-900">Day 14 (or 28)</h4>
+                            <p class="text-stone-600">Final dose (depending on vaccine brand/regimen).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pet Schedule -->
+                <div class="bg-stone-50 rounded-2xl p-8 border border-stone-200">
+                    <h3 class="text-2xl font-bold text-stone-800 mb-6 flex items-center">
+                        <span class="bg-green-100 text-green-600 p-2 rounded-lg mr-3 text-xl">🛡️</span> 
+                        Pet Protection
+                    </h3>
+                    <p class="text-sm text-stone-500 mb-6">Vaccinating pets creates a buffer between wildlife rabies and humans.</p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center bg-white p-4 rounded-lg shadow-sm border border-stone-100">
+                            <div class="text-3xl mr-4">🗓️</div>
+                            <div>
+                                <span class="block text-xs uppercase font-bold text-stone-400">Step 1</span>
+                                <strong class="text-lg">At 3 Months Old</strong>
+                                <span class="block text-stone-600 text-sm">Initial vaccination dose.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-white p-4 rounded-lg shadow-sm border border-stone-100">
+                            <div class="text-3xl mr-4">🔄</div>
+                            <div>
+                                <span class="block text-xs uppercase font-bold text-stone-400">Step 2</span>
+                                <strong class="text-lg">1 Year Later</strong>
+                                <span class="block text-stone-600 text-sm">Booster shot.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-white p-4 rounded-lg shadow-sm border border-stone-100">
+                            <div class="text-3xl mr-4">♾️</div>
+                            <div>
+                                <span class="block text-xs uppercase font-bold text-stone-400">Step 3</span>
+                                <strong class="text-lg">Every 1-3 Years</strong>
+                                <span class="block text-stone-600 text-sm">Maintenance shots (check local laws).</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Locator -->
+    <section id="emergency" class="py-16 bg-red-50 border-y border-red-100">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+                <div class="bg-red-600 text-white p-6">
+                    <h2 class="text-3xl font-bold mb-2">🚑 Emergency Protocol</h2>
+                    <p>Act quickly. Do not wait for symptoms.</p>
+                </div>
+                <div class="p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mb-8">
+                        <div>
+                            <h4 class="font-bold text-red-600 uppercase tracking-wide mb-2 text-sm">Immediate Action</h4>
+                            <p class="text-stone-800 text-lg">Wash wound with soap & running water for <strong class="text-red-600">15 minutes</strong>.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-red-600 uppercase tracking-wide mb-2 text-sm">Next Step</h4>
+                            <p class="text-stone-800 text-lg">Go to the nearest <strong class="text-red-600">Animal Bite Treatment Center</strong>.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-stone-100 p-6 rounded-xl">
+                        <label class="block text-left text-sm font-bold text-stone-600 mb-2">Find Help Nearby</label>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" id="locationInput" placeholder="Enter City or Zip Code" class="flex-1 px-4 py-3 rounded-lg border border-stone-300 focus:ring-2 focus:ring-red-500 focus:outline-none">
+                            <button onclick="findHelp()" class="bg-stone-800 text-white px-6 py-3 rounded-lg font-bold hover:bg-stone-900 transition flex items-center justify-center">
+                                <span class="mr-2">🔍</span> Search
+                            </button>
+                            <button onclick="useGPS()" class="bg-red-100 text-red-700 px-6 py-3 rounded-lg font-bold hover:bg-red-200 transition flex items-center justify-center" title="Use Current Location">
+                                📍 GPS
+                            </button>
+                        </div>
+                        <p id="geo-status" class="mt-2 text-xs text-stone-500 text-left h-4"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="py-16 bg-stone-900 text-white">
+        <div class="max-w-3xl mx-auto px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4">Are You Rabies Aware?</h2>
+                <p class="text-stone-400">Test your knowledge. It could save a life.</p>
+            </div>
+            
+            <div id="quiz-container" class="bg-stone-800 rounded-2xl p-8 shadow-2xl border border-stone-700 min-h-[300px] flex flex-col justify-center">
+                <!-- Quiz content injected here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-stone-500 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="border-b border-stone-800 pb-8 mb-8">
+                <p class="font-bold text-stone-300 uppercase tracking-widest text-sm mb-4">Medical Disclaimer</p>
+                <p class="max-w-3xl mx-auto text-sm leading-relaxed">
+                    This application is for educational and informational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or qualified health provider with any questions you may have regarding a medical condition or animal bite. If you believe you have a medical emergency, call your doctor or emergency services immediately.
+                </p>
+            </div>
+            <p>&copy; 2023 Rabies Awareness Initiative. Stay Safe.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- CHART CONFIGURATION ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('survivalChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Survival w/o PEP', 'Survival w/ PEP'],
+                    datasets: [{
+                        data: [0, 100], // Stark contrast
+                        backgroundColor: [
+                            '#fee2e2', // Very light red for the "0" part (invisible essentially but good for legend)
+                            '#10b981'  // Emerald-500 for success
+                        ],
+                        hoverBackgroundColor: ['#fecaca', '#059669'],
+                        borderWidth: 0
+                    },
+                    {
+                        // Second dataset for "Fatality w/o PEP" to make the point visually
+                        label: 'Fatality Rate (No Vaccine)',
+                        data: [100, 0],
+                        backgroundColor: ['#dc2626', '#d1fae5'], // Red-600
+                        borderWidth: 0,
+                        weight: 0.5 // Outer ring
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#44403c',
+                                font: { family: "'Segoe UI', sans-serif" }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if(context.datasetIndex === 1 && context.dataIndex === 0) return "Fatality if untreated: 100%";
+                                    if(context.datasetIndex === 0 && context.dataIndex === 1) return "Survival with timely Vaccine: 100%";
+                                    return "";
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Fatality vs. Prevention Efficiency',
+                            color: '#1c1917',
+                            font: { size: 16 }
+                        }
+                    },
+                    cutout: '60%',
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+
+            // Initialize Quiz
+            loadQuiz();
+        });
+
+        // --- TAB NAVIGATION LOGIC ---
+        function switchTab(tabId) {
+            // Hide all content
+            ['transmission', 'symptoms', 'myths'].forEach(id => {
+                document.getElementById(`content-${id}`).classList.add('hidden');
+                document.getElementById(`tab-${id}`).classList.remove('tab-active');
+                document.getElementById(`tab-${id}`).classList.add('tab-inactive');
+            });
+
+            // Show selected content
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('tab-active');
+            document.getElementById(`tab-${tabId}`).classList.remove('tab-inactive');
+        }
+
+        // --- EMERGENCY LOCATOR LOGIC ---
+        function findHelp() {
+            const input = document.getElementById('locationInput').value;
+            performSearch(input ? input : "Near Me");
+        }
+
+        function useGPS() {
+            const status = document.getElementById('geo-status');
+            status.textContent = "Locating...";
+            
+            if (!navigator.geolocation) {
+                status.textContent = "Geolocation is not supported by your browser.";
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    status.textContent = "Location found!";
+                    window.open(`https://www.google.com/maps/search/Animal+Bite+Treatment+Center/@${lat},${lng},13z`, '_blank');
+                },
+                () => {
+                    status.textContent = "Unable to retrieve your location.";
+                }
+            );
+        }
+
+        function performSearch(query) {
+            const searchTerm = `Animal Bite Treatment Center ${query}`;
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchTerm)}`, '_blank');
+        }
+
+        // --- QUIZ LOGIC ---
+        // Data Storage for Quiz
+        const quizData = [
+            {
+                q: "What is the very first step if bitten by an animal?",
+                a: ["Apply antiseptic cream", "Wash with soap/water for 15 mins", "Bandage it tightly", "Chase the animal"],
+                c: 1, // Index of correct
+                info: "Washing the wound mechanically removes saliva and significantly reduces the viral load."
+            },
+            {
+                q: "When is it too late to get the vaccine?",
+                a: ["After 24 hours", "After 7 days", "Once symptoms appear", "Never"],
+                c: 2,
+                info: "Once neurological symptoms (confusion, hydrophobia) begin, rabies is almost 100% fatal. You must get PEP before this stage."
+            },
+            {
+                q: "Which animal is the primary cause of human rabies deaths worldwide?",
+                a: ["Bats", "Dogs", "Cats", "Rats"],
+                c: 1,
+                info: "Dogs contribute to up to 99% of all rabies transmissions to humans."
+            }
+        ];
+
+        let currentQIndex = 0;
+        let score = 0;
+
+        function loadQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            if (currentQIndex >= quizData.length) {
+                // Quiz Finished
+                container.innerHTML = `
+                    <div class="text-center animate-fade-in">
+                        <div class="text-6xl mb-4">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Quiz Complete!</h3>
+                        <p class="text-xl mb-6">You scored <span class="${score === quizData.length ? 'text-green-400' : 'text-yellow-400'} font-bold">${score}/${quizData.length}</span></p>
+                        <p class="text-stone-400 mb-8">${score === quizData.length ? 'Excellent! You are rabies aware.' : 'Review the educational sections and try again.'}</p>
+                        <button onclick="resetQuiz()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-500 transition">Retake Quiz</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = quizData[currentQIndex];
+            
+            let optionsHTML = q.a.map((opt, i) => `
+                <button onclick="handleAnswer(${i})" class="w-full text-left bg-stone-700 hover:bg-stone-600 p-4 rounded-lg mb-3 transition border border-stone-600 group">
+                    <span class="inline-block w-6 h-6 rounded-full bg-stone-500 text-xs text-center leading-6 mr-3 group-hover:bg-blue-500 text-white">${i+1}</span>
+                    ${opt}
+                </button>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="animate-fade-in w-full">
+                    <div class="flex justify-between text-stone-400 text-sm mb-4 uppercase tracking-wider">
+                        <span>Question ${currentQIndex + 1} / ${quizData.length}</span>
+                        <span>Score: ${score}</span>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-6">${q.q}</h3>
+                    <div class="space-y-2">
+                        ${optionsHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleAnswer(selectedIndex) {
+            const q = quizData[currentQIndex];
+            const container = document.getElementById('quiz-container');
+            const isCorrect = selectedIndex === q.c;
+
+            if (isCorrect) score++;
+
+            // Show feedback
+            container.innerHTML = `
+                <div class="animate-fade-in w-full text-center">
+                    <div class="text-5xl mb-4">${isCorrect ? '✅' : '❌'}</div>
+                    <h3 class="text-2xl font-bold mb-2 ${isCorrect ? 'text-green-400' : 'text-red-400'}">
+                        ${isCorrect ? 'Correct!' : 'Incorrect'}
+                    </h3>
+                    <p class="text-stone-300 mb-6 bg-stone-900/50 p-4 rounded-lg border border-stone-700">
+                        ${q.info}
+                    </p>
+                    <button onclick="nextQuestion()" class="bg-stone-100 text-stone-900 px-8 py-3 rounded-lg font-bold hover:bg-stone-200 transition">
+                        ${currentQIndex === quizData.length - 1 ? 'See Results' : 'Next Question'}
+                    </button>
+                </div>
+            `;
+        }
+
+        function nextQuestion() {
+            currentQIndex++;
+            loadQuiz();
+        }
+
+        function resetQuiz() {
+            currentQIndex = 0;
+            score = 0;
+            loadQuiz();
+        }
+    </script>
+</body>
+</html>
